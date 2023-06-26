@@ -1,13 +1,15 @@
 fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+  let mut result: Vec<i32> = Vec::with_capacity(2);
   for i in 0..nums.len()-1 {
     for j in i+1..=nums.len()-1 {
-//        println!("indices: {i} {j}");
       if nums[i]+nums[j] == target {
-        return vec![i.try_into().unwrap(), j.try_into().unwrap()];
+        result.push(i as i32);
+        result.push(j as i32);
+        return result;
       }
     }
   }
-  return vec![0,0];
+  result
 }
 
 fn main() {
