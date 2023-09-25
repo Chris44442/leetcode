@@ -1,5 +1,0 @@
-{
-    "rust-analyzer.linkedProjects": [
-        "./AoC/a22_01/Cargo.toml"
-    ]
-}
