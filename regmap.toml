@@ -1,0 +1,7 @@
+[register.reg0]
+width = "32"
+offset = 0x0
+
+[register.reg1]
+width = "32"
+offset = 0x4
