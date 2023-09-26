@@ -1,3 +1,6 @@
+[general]
+axi_addr_width = 5
+
 [register.reg0]
 width = "32"
 offset = 0x0
