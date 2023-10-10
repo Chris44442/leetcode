@@ -51,15 +51,39 @@ use std::collections::BTreeSet;
 
 const INPUT: &str = include_str!("../input");
 
-fn main() {
+fn ell() -> (i32, i32) {
   let elves = INPUT
     .split("\n\n")
     .map(|ls| ls.lines().map(|l| l.parse::<i32>().unwrap()).sum::<i32>())
     .collect::<BTreeSet<_>>();
   println!("Max Elf: {:?}", elves.iter().rev().next().unwrap());
   println!("Max 3 Elves: {}", elves.iter().rev().take(3).sum::<i32>());
+  (*elves.iter().rev().next().unwrap(), elves.iter().rev().take(3).sum::<i32>())
 }
 
-// for obco in elves {
-//   println!("Max Elf: {}", obco);
-// }
+fn main() {
+  // ell();
+
+  let abc:&[u8] = input();
+
+
+  for byyte in abc.iter() {
+    println!("aaaa huhu: {}", byyte);
+  }
+}
+
+
+pub fn input() -> &'static [u8] {
+    include_bytes!("../input")
+}
+
+
+#[test]
+fn day01_part1() {
+    assert_eq!(ell().0, 66616);
+}
+
+#[test]
+fn day01_part2() {
+    assert_eq!(ell().1, 199172);
+}
