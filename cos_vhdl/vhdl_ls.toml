@@ -1,0 +1,4 @@
+[libraries]
+cos_test.files = [
+  '*.vhd',
+]

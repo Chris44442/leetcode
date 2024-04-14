@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.118 (w)1999-2023 BSI
+[*] Sun Apr 14 15:58:03 2024
+[*]
+[dumpfile] "/home/chris/repo/cos_vhdl/cos_1_tb-sim.vcd"
+[dumpfile_mtime] "Sun Apr 14 15:57:51 2024"
+[dumpfile_size] 20452
+[savefile] "/home/chris/repo/cos_vhdl/wave.gtkw"
+[timestart] 0
+[size] 2048 1058
+[pos] -1 -1
+*-24.713392 90300000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] cos_1_tb.
+[sst_width] 209
+[signals_width] 369
+[sst_expanded] 1
+[sst_vpaned_height] 314
+@22
+cos_1_tb.cos_1.med1[7:-32]
+cos_1_tb.cos_1.med2[8:-32]
+@40000420
+[fpshift_count] 32
+cos_1_tb.cos_1.med3[16:-32]
+[fpshift_count] 32
+cos_1_tb.cos_1.med6[17:-32]
+@28
+cos_1_tb.cos_1.clk
+@40000421
+[fpshift_count] 32
+cos_1_tb.cos_1.x[1:-32]
+@40000420
+[fpshift_count] 32
+cos_1_tb.cos_1.cos_x[1:-32]
+[pattern_trace] 1
+[pattern_trace] 0
