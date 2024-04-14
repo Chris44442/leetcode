@@ -1,0 +1,43 @@
+[*]
+[*] GTKWave Analyzer v3.3.118 (w)1999-2023 BSI
+[*] Sun Apr 14 22:19:42 2024
+[*]
+[dumpfile] "/home/chris/repo/LeetCode/cos_vhdl/calc_tb-sim.vcd"
+[dumpfile_mtime] "Sun Apr 14 22:18:46 2024"
+[dumpfile_size] 8842
+[savefile] "/home/chris/repo/LeetCode/cos_vhdl/wave.gtkw"
+[timestart] 0
+[size] 2048 1058
+[pos] -1 -1
+*-24.713392 170000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] calc_tb.
+[treeopen] calc_tb.cos_1.
+[sst_width] 209
+[signals_width] 369
+[sst_expanded] 1
+[sst_vpaned_height] 314
+@28
+calc_tb.cos_1.clk
+calc_tb.cos_1.reset
+@22
+calc_tb.cos_1.bla2[33:-64]
+@40000420
+[fpshift_count] 32
+calc_tb.cos_1.bla[1:-32]
+[fpshift_count] 32
+calc_tb.cos_1.coss[1:-32]
+@28
+calc_tb.cos_1.super1[3:-32]
+calc_tb.cos_1.super2[3:-32]
+calc_tb.cos_1.super3[3:-32]
+calc_tb.cos_1.super4[3:-32]
+@40000420
+[fpshift_count] 32
+calc_tb.cos_1.super4[3:-32]
+@28
+calc_tb.cos_1.start
+@40000421
+[fpshift_count] 32
+calc_tb.cos_1.coss[1:-32]
+[pattern_trace] 1
+[pattern_trace] 0
