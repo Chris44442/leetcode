@@ -22,6 +22,7 @@ architecture rtl of cos_1 is
 -- // p(x)=((-1.2221270623190845*x+4.0412838261529709)*x-4.9339380151432999)*x+9.9999329528216742e-1
 -- // Estimated max error: 6.7047178325783373e-6
 
+-- number of fractional bits
   constant FRACS : integer := -32;
 -- taylor coefficients
   constant c1 : sfixed(3 downto FRACS) := to_sfixed(-1.2221270623190845,3,FRACS);
@@ -44,7 +45,8 @@ architecture rtl of cos_1 is
   signal med6 : sfixed(17 downto FRACS);
 -- range reduction and reconstruction
   signal x_reg1, x_reg2, x_reg3, x_reg4, x_reg5, x_reg6 : sfixed(1 downto FRACS);
-  signal x_tmp1 : sfixed(2 downto FRACS);
+  signal x_tmp1 : sfixed(3 downto FRACS);
+  signal x_tmp3 : sfixed(2 downto FRACS);
   signal x_tmp2 : sfixed(1 downto FRACS);
   signal cos_1_tmp2 : sfixed(1 downto FRACS);
   signal cos_1_tmp1 : sfixed(2 downto FRACS);
@@ -53,7 +55,8 @@ begin
 med1 <= med1_tmp(7 downto FRACS);
 med3 <= med3_tmp(16 downto FRACS);
 med4 <= med4_tmp(7 downto FRACS);
-x_tmp1 <= 1 - x;
+x_tmp1 <= 1 - abs(x);
+x_tmp3 <= abs(x);
 cos_1_tmp1 <= -med6(1 downto FRACS);
 
 process(all) begin
@@ -63,7 +66,7 @@ process(all) begin
     if abs(x) > A_HALF then
       x_tmp2 <= x_tmp1(1 downto FRACS);
     else
-      x_tmp2 <= x;
+      x_tmp2 <= x_tmp3(1 downto FRACS);
     end if;
 
 -- taylor series
