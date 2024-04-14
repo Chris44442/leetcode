@@ -28,13 +28,13 @@ architecture rtl of cos_1 is
   constant c4 : sfixed(3 downto -32) := to_sfixed(0.9999932952821674,3,-32);
   constant A_HALF : sfixed(1 downto FRACS) := to_sfixed(0.5,1,FRACS);
 -- input x to the power of 2 and 4
-  signal pow_x_2 : sfixed(3 downto -64);
-  signal pow_x_4, pow_x_4_reg : sfixed(7 downto -128);
+  signal pow_x_2 : sfixed(3 downto 2*FRACS);
+  signal pow_x_4, pow_x_4_reg : sfixed(7 downto 4*FRACS);
 -- intermediate results
-  signal med1_tmp : sfixed(7 downto -96);
+  signal med1_tmp : sfixed(7 downto 3*FRACS);
   signal med1 : sfixed(7 downto FRACS);
   signal med2 : sfixed(8 downto FRACS);
-  signal med3_tmp : sfixed(16 downto FRACS-128);
+  signal med3_tmp : sfixed(16 downto 5*FRACS);
   signal med3 : sfixed(16 downto FRACS);
   signal med4_tmp : sfixed(7 downto -96);
   signal med4 : sfixed(7 downto FRACS);
@@ -84,7 +84,8 @@ process(all) begin
     x_reg4 <= x_reg3;
     x_reg5 <= x_reg4;
     x_reg6 <= x_reg5;
--- reconstruction
+
+-- range reconstruction
     if x_reg6 = to_sfixed(0,1,-32) then
       cos_1_tmp2 <= to_sfixed(1,1,-32);
     elsif x_reg6 = to_sfixed(1,1,-32) then

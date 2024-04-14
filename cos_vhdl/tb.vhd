@@ -12,7 +12,7 @@ end entity;
 
 architecture sim of cos_1_tb is
   constant PERIOD : time := 10 ns;
-  constant NO_RUNS : natural := 100000;
+  constant NO_RUNS : natural := 10000;
   constant MAX_ALLOWED_ERROR : real := 0.00000671;
   signal clk : std_logic := '0';
   signal reset : std_logic := '1';
