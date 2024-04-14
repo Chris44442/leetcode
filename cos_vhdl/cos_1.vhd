@@ -6,9 +6,8 @@ use ieee.fixed_pkg.all;
 entity cos_1 is
 port(
     clk : in std_logic;
-    reset : in std_logic;
     x : in sfixed(1 downto -32);
-    cos_x : out sfixed(1 downto -32)
+    cos_pi_x : out sfixed(1 downto -32)
 );
 end entity;
 
@@ -100,7 +99,7 @@ process(all) begin
   end if;
 end process;
 
-cos_x <= cos_1_tmp2(1 downto -32);
+cos_pi_x <= cos_1_tmp2(1 downto -32);
 
 end architecture;
 

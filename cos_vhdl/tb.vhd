@@ -60,9 +60,8 @@ end process;
 
 cos_1: entity work.cos_1 port map (
   clk => clk,
-  reset => reset,
   x => x,
-  cos_x => cos_result
+  cos_pi_x => cos_result
 );
 
 end architecture;
