@@ -35,6 +35,7 @@ process
 begin
   test_runner_setup(runner, runner_cfg);
   wait for 1*PERIOD;
+  reset <= '0';
   -- wait for 1*PERIOD;
   -- wait until falling_edge(clk);
   -- for i in 0 to NO_RUNS-1 loop
