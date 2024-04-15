@@ -25,9 +25,14 @@ architecture sim of cordic_tb is
   signal ain : signed(15 downto 0) := 16x"1555";
   signal sinn : signed(15 downto 0);
   signal coss : signed(15 downto 0);
+
+
+  constant lala : sfixed(0 downto -16) := to_sfixed(-0.335,0,-16);
+  signal lala_real : real;
 begin
 
 clk <= not clk after PERIOD/2;
+lala_real <= to_real(lala);
 -- x <= to_sfixed(xreal,1,-32);
 -- result_actual <= to_real(cos_result);
 

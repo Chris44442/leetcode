@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity p2r_CordicPipe is generic(
+entity p2r_cordic_pipe is generic(
   WIDTH : natural := 16;
   PIPEID : natural := 1);
 port(
@@ -13,9 +13,9 @@ port(
   Xo : out signed(WIDTH -1 downto 0);
   Yo : out signed(WIDTH -1 downto 0);
   Zo : out signed(19 downto 0));
-end entity p2r_CordicPipe;
+end entity;
 
-architecture dataflow of p2r_CordicPipe is
+architecture rtl of p2r_cordic_pipe is
 
 function CATAN(n :natural) return integer is
 variable result  :integer;
@@ -57,7 +57,6 @@ end;
   signal dY, Yresult  : signed(WIDTH -1 downto 0);
   signal atan, Zresult  : signed(19 downto 0);
   signal Zneg, Zpos  : std_logic;
-  
 begin
 
 dX <= shift_right(Xi, PIPEID);

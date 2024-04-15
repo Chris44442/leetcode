@@ -9,7 +9,7 @@ entity sc_corproc is port(
   cos  : out signed(15 downto 0));
 end entity sc_corproc;
 
-architecture dataflow of sc_corproc is
+architecture rtl of sc_corproc is
   constant PipeLength : natural := 15;
   constant P : signed(15 downto 0) := x"4dba";  -- define aggregate constant
 
