@@ -42,22 +42,7 @@ begin
     when others => result := 16#0#;
   end case;
   return result;
-end CATAN;
-
-  -- function Delta is actually an arithmatic shift right
-  -- This strange construction is needed for compatibility with Xilinx WebPack
-  function Delta(Arg : signed; Cnt : natural) return signed is
-    variable tmp : signed(Arg'range);
-    constant lo : integer := Arg'high -cnt +1;
-  begin
-    for n in Arg'high downto lo loop
-      tmp(n) := Arg(Arg'high);
-    end loop;
-    for n in Arg'high -cnt downto 0 loop
-      tmp(n) := Arg(n +cnt);
-    end loop;
-    return tmp;
-  end function Delta;
+end;
 
   function AddSub(dataa, datab : in signed; add_sub : in std_logic) return signed is
   begin
@@ -75,8 +60,8 @@ end CATAN;
   
 begin
 
-dX <= Delta(Xi, PIPEID);
-dY <= Delta(Yi, PIPEID);
+dX <= shift_right(Xi, PIPEID);
+dY <= shift_right(Yi, PIPEID);
 atan <= to_signed( catan(PIPEID), 20);
 Zneg <= Zi(19);
 Zpos <= not Zi(19);
