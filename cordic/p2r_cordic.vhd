@@ -4,14 +4,14 @@ use ieee.numeric_std.all;
 
 entity p2r_cordic is generic(
   PIPELINE : integer := 15;
-  WIDTH    : integer := 16);
+  WIDTH : integer := 16);
 port(
-  clk  : in std_logic;
-  Xi  : in signed(WIDTH -1 downto 0);
+  clk : in std_logic;
+  Xi : in signed(WIDTH -1 downto 0);
   Yi : in signed(WIDTH -1 downto 0) := (others => '0');
-  Zi  : in signed(WIDTH -1 downto 0);
-  Xo  : out signed(WIDTH -1 downto 0);
-  Yo  : out signed(WIDTH -1 downto 0));
+  Zi : in signed(WIDTH -1 downto 0);
+  Xo : out signed(WIDTH -1 downto 0);
+  Yo : out signed(WIDTH -1 downto 0));
 end entity p2r_Cordic;
 
 architecture rtl of p2r_cordic is
