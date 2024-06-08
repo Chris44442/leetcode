@@ -1,0 +1,9 @@
+
+
+
+C:\intelFPGA\22.1std\hls\init_hls.bat
+
+i++ -v -march=CycloneV counter.cpp
+
+i++ -v -march="5CSTFD6D5F31I7" --fpga-only --simulator "none" counter.cpp
+PATH="$PATH:C:/Program Files (x86)/Microsoft Visual Studio/2017/Community"
