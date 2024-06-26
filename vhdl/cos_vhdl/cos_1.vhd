@@ -4,10 +4,8 @@ use ieee.numeric_std.all;
 
 entity cos_1 is port(
   clk : in std_logic;
-  -- x : in sfixed(1 downto -32);
-  -- cos_x : out sfixed(1 downto -32));
-  x : in signed(33 downto 0);
-  cos_x : out signed(33 downto 0));
+  x : in signed(63 downto 0); -- interpreted as 1 signum, 31 integer and 32 fractional bits
+  cos_x : out signed(26 downto 0)); -- interpreted as 1 signum, 1 integer and 25 fractional bits
 end entity;
 
 architecture rtl of cos_1 is
@@ -18,6 +16,7 @@ architecture rtl of cos_1 is
 -- // on interval [ 0, 1/4 ]
 -- // p(x)=((-1.2221270623190845*x+4.0412838261529709)*x-4.9339380151432999)*x+9.9999329528216742e-1
 -- // Estimated max error: 6.7047178325783373e-6
+  signal x_bs : signed(33 downto 0);
 
 -- taylor coefficients
   signal c1 : signed(35 downto 0) := x"EC722AE48";
@@ -53,18 +52,20 @@ begin
 med1 <= med1_tmp(7+32+64 downto 0+64);
 med3 <= med3_tmp(16+128+32 downto 128);
 med4 <= med4_tmp(7+96 downto 64);
-x_tmp1 <= "0" & (ONE - x);
+x_tmp1 <= "0" & (ONE - x_bs);
 cos_1_tmp1 <= "0" & (-med6(33 downto 0));
 
+x_bs(32 downto 0) <= x(32 downto 0);
+x_bs(33) <= x(63);
 
 process(clk) begin
   if rising_edge(clk) then
 
 -- range reduction
-    if abs(x) > A_HALF then
+    if abs(x_bs) > A_HALF then
       x_tmp2 <= x_tmp1(33 downto 0);
     else
-      x_tmp2 <= x;
+      x_tmp2 <= x_bs;
     end if;
 
 -- taylor series
@@ -80,7 +81,7 @@ process(clk) begin
     med6 <= "0" & (med5_reg + med3);
 
 -- pipeline registers
-    x_reg1 <= x;
+    x_reg1 <= x_bs;
     x_reg2 <= x_reg1;
     x_reg3 <= x_reg2;
     x_reg4 <= x_reg3;
@@ -90,10 +91,10 @@ process(clk) begin
 -- reconstruction
     if x_reg6 = 0 then
       cos_1_tmp2 <= ONE;
-    elsif x_reg6 = ONE then
+    elsif abs(x_reg6) = ONE then
       cos_1_tmp2 <= MINUS_ONE;
-    elsif x_reg6 = MINUS_ONE then
-      cos_1_tmp2 <= MINUS_ONE;
+    elsif abs(x_reg6) = A_HALF then
+      cos_1_tmp2 <= (others => '0');
     elsif abs(x_reg6) > A_HALF then
       cos_1_tmp2 <= cos_1_tmp1(33 downto 0);
     else
@@ -102,7 +103,7 @@ process(clk) begin
   end if;
 end process;
 
-cos_x <= cos_1_tmp2(33 downto 0);
+cos_x <= cos_1_tmp2(33 downto 7);
 
 end architecture;
 
