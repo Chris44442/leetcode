@@ -18,6 +18,8 @@ architecture sim of cos_1_tb is
   signal reset : std_logic := '1';
   signal cos_result : sfixed(1 downto -32);
   signal x : sfixed(1 downto -32);
+  signal x_bla, cos_bla : sfixed(33 downto 0);
+  signal x_signed, cos_signed : signed(33 downto 0);
   signal xreal : real := 0.0;
   signal cos_real : real := 0.0;
   type real_array is array (natural range <>) of real;
@@ -60,9 +62,15 @@ end process;
 
 cos_1: entity work.cos_1 port map (
   clk => clk,
-  x => x,
-  cos_x => cos_result
+  x => x_signed,
+  cos_x => cos_signed
 );
+
+cos_bla <= sfixed(cos_signed);
+cos_result <= cos_bla;
+
+x_bla <= x;
+x_signed <= signed(x_bla);
 
 end architecture;
 
