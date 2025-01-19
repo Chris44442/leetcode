@@ -23,6 +23,8 @@ pub struct Radar {
 
 pub struct Contact {
     class: Class,
+    position: Vec2,
+    velocity: Vec2,
     trq_to_intercept: f64,
     suggest_fire_cmd: bool,
     engaged: bool,
@@ -60,9 +62,22 @@ impl Ship {
         self.radar.azimuth += self.radar.azimuth_inc;
 
         if let Some(contact) = scan() {
+            let n_contact: Contact = Contact {
+                class: contact.class,
+                position: contact.position,
+                velocity: contact.velocity,
+                trq_to_intercept: 0.0,
+                suggest_fire_cmd: false,
+                engaged: true,
+            };
+
+            if self.radar.contact.is_empty() {
+                self.radar.contact.push(n_contact);
+            }
             self.radar.mode = RadarMode::STT;
             //self.radar.azimuth = angle_diff(heading(), contact.position.angle() - position().angle());
 
+            //self.radar.azimuth = (self.radar.contact[0].position - position()).angle();
             self.radar.azimuth = (contact.position - position()).angle();
 
             //draw_line(position(), contact.position, 0x00ff00);
@@ -118,6 +133,15 @@ impl Ship {
 
     pub fn tick(&mut self) {
         self.update_radar();
+
+        let rm;
+        if self.radar.mode == RadarMode::RWS {
+            rm = "RWS";
+        } else {
+            rm = "STT";
+        }
+        debug!("{}", rm);
+
         //torque(trq);
         //fire(0);
     }
