@@ -5,10 +5,24 @@ use oort_api::prelude::*;
 const BULLET_SPEED: f64 = 1000.0; // m/s
 const FIGHTER_MAX_TORQUE: f64 = 2.0 * PI; // m/s^2
 
+#[derive(Default, PartialEq, Eq)]
+pub enum RadarMode {
+    #[default]
+    RWS,
+    STT,
+    TWS,
+}
+
+#[derive(Default)]
+pub struct Radar {
+    mode: RadarMode,
+    azimuth_inc: f64,
+}
+
 pub struct Ship {
     sweeping: bool,
     next_radar_heading: f64,
-    velocity: f64,
+    radar: Radar,
 }
 
 impl Ship {
@@ -16,19 +30,22 @@ impl Ship {
         Ship {
             sweeping: true,
             next_radar_heading: 0.0,
-            velocity: 0.0,
+            radar: Radar {
+                ..Default::default()
+            },
         }
     }
 
-    pub fn tick(&mut self) {
-        let mut azimuth_inc: f64 = 0.0;
-        if self.sweeping {
-            azimuth_inc = 0.10;
+    pub fn update_radar(&mut self) {
+        if self.radar.mode == RadarMode::RWS {
+            self.radar.azimuth_inc = 0.65;
+            set_radar_width(2.5);
+        } else if self.radar.mode == RadarMode::STT {
+            self.radar.azimuth_inc = 0.0;
+            set_radar_width(0.2);
         }
 
-        //set_radar_heading(radar_heading() + azimuth_inc);
-        set_radar_heading(self.next_radar_heading + azimuth_inc);
-        set_radar_width(0.2);
+        set_radar_heading(self.next_radar_heading + self.radar.azimuth_inc);
         if let Some(contact) = scan() {
             self.sweeping = false;
             self.next_radar_heading =
@@ -52,6 +69,8 @@ impl Ship {
             let safety_factor = 1.03;
             let breaking_distance =
                 0.5 * angular_velocity() * angular_velocity() / FIGHTER_MAX_TORQUE * safety_factor;
+
+            //let abc = (dp[0] * dp[0] + dp[1] * dp[1]).sqrt();
 
             debug!("ang_diff: {}", ang_diff);
             debug!("ang_velocity: {}", angular_velocity());
@@ -81,5 +100,11 @@ impl Ship {
             self.sweeping = true;
             self.next_radar_heading = radar_heading();
         }
+    }
+
+    pub fn tick(&mut self) {
+        self.update_radar();
+        //torque(trq);
+        //fire(0);
     }
 }
