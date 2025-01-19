@@ -23,7 +23,7 @@ impl Ship {
     pub fn tick(&mut self) {
         let mut azimuth_inc: f64 = 0.0;
         if self.sweeping {
-            azimuth_inc = 0.03;
+            azimuth_inc = 0.10;
         }
 
         //set_radar_heading(radar_heading() + azimuth_inc);
@@ -33,16 +33,13 @@ impl Ship {
             self.sweeping = false;
             self.next_radar_heading =
                 angle_diff(heading(), contact.position.angle() - position().angle());
-            //accelerate(0.1 * (contact.position - position()));
-            //fire(0);
-            //turn(f64::signum(angle_diff(heading(), (target() - position()).angle())));
 
             self.next_radar_heading = (contact.position - position()).angle();
 
             //draw_line(position(), contact.position, 0x00ff00);
             let dp = contact.position - position();
             let t_start = dp.length() / BULLET_SPEED;
-            let a = contact.velocity - self.velocity;
+            //let a = contact.velocity - self.velocity;
             let a = 0.0;
             let posi_to_shot =
                 contact.position + contact.velocity * t_start + 0.5 * a * t_start * t_start;
@@ -58,7 +55,7 @@ impl Ship {
 
             debug!("ang_diff: {}", ang_diff);
             debug!("ang_velocity: {}", angular_velocity());
-            debug!("ds: {}", breaking_distance);
+            debug!("breaking_distance: {}", breaking_distance);
             let s1 = signum(ang_diff);
             let s2 = signum(angular_velocity());
             let s3 = signum(abs(ang_diff) - breaking_distance);
@@ -73,24 +70,9 @@ impl Ship {
             }
 
             if abs(ang_diff) > 0.000 {
-                let trq = FIGHTER_MAX_TORQUE * s4;
-                debug!("torque: {}", trq);
+                let trq = FIGHTER_MAX_TORQUE * s4; // TODO fuel considerations
+                                                   //debug!("torque: {}", trq);
                 torque(trq);
-                //if ang_diff > 0.0 {
-                //    debug!("pos diff angle");
-                //    if ds < f64::abs(ang_diff) {
-                //        torque(FIGHTER_MAX_TORQUE);
-                //    } else {
-                //        torque(-FIGHTER_MAX_TORQUE);
-                //    }
-                //} else {
-                //    debug!("neg diff angle");
-                //    if ds < f64::abs(ang_diff) {
-                //        torque(-FIGHTER_MAX_TORQUE);
-                //    } else {
-                //        torque(FIGHTER_MAX_TORQUE);
-                //    }
-                //}
             }
             if abs(ang_diff) < 0.03 {
                 fire(0);
