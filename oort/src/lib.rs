@@ -13,25 +13,37 @@ pub enum RadarMode {
     TWS,
 }
 
-#[derive(Default)]
 pub struct Radar {
     mode: RadarMode,
     azimuth_inc: f64,
+    azimuth: f64,
+    beam_width: f64,
+    contact: Vec<Contact>,
+}
+
+pub struct Contact {
+    class: Class,
+    trq_to_intercept: f64,
+    suggest_fire_cmd: bool,
+    engaged: bool,
 }
 
 pub struct Ship {
-    sweeping: bool,
-    next_radar_heading: f64,
     radar: Radar,
 }
 
 impl Ship {
     pub fn new() -> Ship {
         Ship {
-            sweeping: true,
-            next_radar_heading: 0.0,
             radar: Radar {
-                ..Default::default()
+                mode: RadarMode::RWS,
+                azimuth_inc: 0.0,
+                azimuth: 0.0,
+                beam_width: 0.0,
+                //contact: Contact {
+                //    class: Class::Unknown,
+                //},
+                contact: vec![],
             },
         }
     }
@@ -39,19 +51,19 @@ impl Ship {
     pub fn update_radar(&mut self) {
         if self.radar.mode == RadarMode::RWS {
             self.radar.azimuth_inc = 0.65;
-            set_radar_width(2.5);
+            self.radar.beam_width = 2.5;
         } else if self.radar.mode == RadarMode::STT {
             self.radar.azimuth_inc = 0.0;
-            set_radar_width(0.2);
+            self.radar.beam_width = 0.2;
         }
 
-        set_radar_heading(self.next_radar_heading + self.radar.azimuth_inc);
-        if let Some(contact) = scan() {
-            self.sweeping = false;
-            self.next_radar_heading =
-                angle_diff(heading(), contact.position.angle() - position().angle());
+        self.radar.azimuth += self.radar.azimuth_inc;
 
-            self.next_radar_heading = (contact.position - position()).angle();
+        if let Some(contact) = scan() {
+            self.radar.mode = RadarMode::STT;
+            //self.radar.azimuth = angle_diff(heading(), contact.position.angle() - position().angle());
+
+            self.radar.azimuth = (contact.position - position()).angle();
 
             //draw_line(position(), contact.position, 0x00ff00);
             let dp = contact.position - position();
@@ -97,9 +109,11 @@ impl Ship {
                 fire(0);
             }
         } else {
-            self.sweeping = true;
-            self.next_radar_heading = radar_heading();
+            self.radar.mode = RadarMode::RWS;
         }
+
+        set_radar_heading(self.radar.azimuth);
+        set_radar_width(self.radar.beam_width);
     }
 
     pub fn tick(&mut self) {
