@@ -28,7 +28,7 @@ impl Ship {
         //    posi = position();
         //}
 
-        //debug!("{}", current_tick());
+        debug!("vel x {}", velocity()[0]);
 
         if !self.radar.contact.is_empty() {
             torque(self.radar.contact[0].trq_to_intercept);

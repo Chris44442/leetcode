@@ -62,15 +62,25 @@ impl Radar {
             self.mode = RadarMode::STT;
             self.azimuth = (self.contact[0].position - position()).angle();
             let dp = contact.position - position();
-            let t_start = dp.length() / BULLET_SPEED;
+            let dv1 = contact.velocity - velocity();
+            let abs_bullet_spd_x = BULLET_SPEED * heading().cos() + velocity()[0];
+            let abs_bullet_spd_y = BULLET_SPEED * heading().sin() + velocity()[1];
+            debug!("abs_bullet_spd_x = {}", abs_bullet_spd_x);
+            debug!("abs_bullet_spd_y = {}", abs_bullet_spd_y);
+
+            let abs_blt_spd =
+                (abs_bullet_spd_x * abs_bullet_spd_x + abs_bullet_spd_y * abs_bullet_spd_y).sqrt();
+
+            //let t_start = dp.length() / BULLET_SPEED;
+            let t_start = dp.length() / abs_blt_spd;
+            debug!("abs_bullet_spd = {}", abs_blt_spd);
             //let a = contact.velocity - self.velocity;
             let a = 0.0;
-            let v1 = contact.velocity - velocity();
             let posi_to_shot =
                 contact.position + contact.velocity * t_start + 0.5 * a * t_start * t_start;
             let dp2 = posi_to_shot - position();
             let t = dp2.length() / BULLET_SPEED;
-            let posi_to_shot2 = contact.position + v1 * t + 0.5 * a * t * t;
+            let posi_to_shot2 = contact.position + dv1 * t + 0.5 * a * t * t;
             let ang_diff = angle_diff(heading(), (posi_to_shot2 - position()).angle());
             //draw_line(position(), posi_to_shot2, 0xffff00);
 
