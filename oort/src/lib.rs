@@ -4,10 +4,13 @@ mod propulsion;
 use propulsion::*;
 mod radar;
 use radar::*;
+mod radio;
+use radio::*;
 
 pub struct Ship {
     radar: Radar,
     prop: Propulsion,
+    radio: Radio,
 }
 
 impl Ship {
@@ -15,6 +18,7 @@ impl Ship {
         Ship {
             radar: Radar::new(),
             prop: Propulsion::new(),
+            radio: Radio::new(),
         }
     }
 
