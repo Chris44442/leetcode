@@ -65,50 +65,18 @@ impl Radar {
             let t_start = dp.length() / BULLET_SPEED;
             //let a = contact.velocity - self.velocity;
             let a = 0.0;
+            let v1 = contact.velocity - velocity();
             let posi_to_shot =
                 contact.position + contact.velocity * t_start + 0.5 * a * t_start * t_start;
             let dp2 = posi_to_shot - position();
             let t = dp2.length() / BULLET_SPEED;
-            let posi_to_shot2 = contact.position + target_velocity() * t + 0.5 * a * t * t;
+            let posi_to_shot2 = contact.position + v1 * t + 0.5 * a * t * t;
             let ang_diff = angle_diff(heading(), (posi_to_shot2 - position()).angle());
             //draw_line(position(), posi_to_shot2, 0xffff00);
 
             let safety_factor = 1.03;
             let ang_breaking_distance =
                 0.5 * angular_velocity() * angular_velocity() / FIGHTER_MAX_TORQUE * safety_factor;
-
-            let distance = (dp2[0] * dp2[0] + dp2[1] * dp2[1]).sqrt();
-            let v_diff = contact.velocity - velocity();
-            //debug!("v_diff: {}", v_diff);
-            //let position_angle = (dp2[1] / dp2[0]).atan();
-            let v = (v_diff[0] * v_diff[0] + v_diff[1] * v_diff[1]).sqrt();
-            let v_rad = ang_diff.cos() * v;
-            //debug!("v_rad: {}", v_rad);
-
-            let offset = 100.0; // meter
-            let breaking_distance =
-                0.5 * v_rad * v_rad / FIGHTER_MAX_TORQUE * safety_factor + offset;
-            let k3 = signum(distance - breaking_distance);
-            let k4;
-
-            if v_rad < 0.0 {
-                k4 = 1.0;
-            } else {
-                k4 = k3;
-            }
-
-            self.contact[0].acc_to_intercept =
-                vec2(heading().cos(), heading().sin()).normalize() * FIGHTER_MAX_ACC * k4;
-
-            //let rel_vel = contact.velocity - velocity();
-
-            //debug!(
-            //    "acc_to_intercept: {}",
-            //    v_diff.normalize() * FIGHTER_MAX_ACC * k4
-            //);
-            //debug!("k4: {}", k4);
-            //debug!("breaking_distance: {}", breaking_distance);
-            //debug!("distance: {}", distance);
 
             let s1 = signum(ang_diff);
             let s2 = signum(angular_velocity());
