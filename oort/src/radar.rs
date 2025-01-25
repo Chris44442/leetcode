@@ -19,6 +19,7 @@ pub struct Radar {
     pub azimuth: f64,
     pub beam_width: f64,
     pub contact: Vec<Contact>,
+    pub last_velocity: Vec2,
 }
 
 impl Radar {
@@ -29,6 +30,7 @@ impl Radar {
             azimuth: 0.0,
             beam_width: 0.0,
             contact: vec![],
+            last_velocity: vec2(0.0, 0.0),
         }
     }
 
@@ -74,12 +76,13 @@ impl Radar {
             //let t_start = dp.length() / BULLET_SPEED;
             let t_start = dp.length() / abs_blt_spd;
             debug!("abs_bullet_spd = {}", abs_blt_spd);
-            //let a = contact.velocity - self.velocity;
-            let a = 0.0;
+            let a = velocity() - self.last_velocity;
+            self.last_velocity = velocity();
+            //let a = 0.0;
             let posi_to_shot =
                 contact.position + contact.velocity * t_start + 0.5 * a * t_start * t_start;
             let dp2 = posi_to_shot - position();
-            let t = dp2.length() / BULLET_SPEED;
+            let t = dp2.length() / abs_blt_spd;
             let posi_to_shot2 = contact.position + dv1 * t + 0.5 * a * t * t;
             let ang_diff = angle_diff(heading(), (posi_to_shot2 - position()).angle());
             //draw_line(position(), posi_to_shot2, 0xffff00);
