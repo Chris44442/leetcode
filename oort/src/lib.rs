@@ -2,38 +2,18 @@ use crate::maths_rs::abs;
 use crate::maths_rs::signum;
 use oort_api::prelude::*;
 
+mod moves;
+mod radar;
+use moves::PID;
+use radar::*;
 const BULLET_SPEED: f64 = 1000.0; // m/s
 const FIGHTER_MAX_TORQUE: f64 = 2.0 * PI; // m/s^2
 const FIGHTER_MAX_ACC: f64 = 60.0; // m/s^2
 
-#[derive(Default, PartialEq, Eq)]
-pub enum RadarMode {
-    #[default]
-    RWS,
-    STT,
-    TWS,
-}
-
-pub struct Radar {
-    mode: RadarMode,
-    azimuth_inc: f64,
-    azimuth: f64,
-    beam_width: f64,
-    contact: Vec<Contact>,
-}
-
-pub struct Contact {
-    class: Class,
-    position: Vec2,
-    velocity: Vec2,
-    acc_to_intercept: Vec2,
-    trq_to_intercept: f64,
-    suggest_fire_cmd: bool,
-    engaged: bool,
-}
-
 pub struct Ship {
     radar: Radar,
+    pd_x: PID,
+    pd_y: PID,
 }
 
 impl Ship {
@@ -49,6 +29,8 @@ impl Ship {
                 //},
                 contact: vec![],
             },
+            pd_x: PID::new(0.2, 85.0, 0.0),
+            pd_y: PID::new(0.2, 85.0, 0.0),
         }
     }
 
