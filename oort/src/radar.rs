@@ -1,5 +1,6 @@
 use crate::maths_rs::abs;
 use crate::maths_rs::signum;
+use maths_rs::distance;
 use oort_api::prelude::*;
 const BULLET_SPEED: f64 = 1000.0; // m/s
 const FIGHTER_MAX_TORQUE: f64 = 2.0 * PI; // m/s^2
@@ -105,8 +106,13 @@ impl Radar {
             }
 
             self.contact[0].trq_to_intercept = FIGHTER_MAX_TORQUE * s4;
+
             if abs(ang_diff) < 0.03 {
-                self.contact[0].suggest_fire_cmd = true;
+                let distance = (dp2[0] * dp2[0] + dp2[1] * dp2[1]).sqrt();
+                debug!("distance = {}", distance);
+                if distance < 10550.0 {
+                    self.contact[0].suggest_fire_cmd = true;
+                }
             } else {
                 self.contact[0].suggest_fire_cmd = false;
             }
