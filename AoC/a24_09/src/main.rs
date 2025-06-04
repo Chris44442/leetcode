@@ -55,6 +55,47 @@ pub fn part1(input : &str) -> i64{
     return acc;
 }
 
+pub fn part2(input : &str) -> i64{
+
+    const FREE_SPACE : i64 = 999_999_999;
+    let digits : Vec<i64> = input
+        .chars()
+        .filter(|c| c.is_digit(10))
+        .map(|c| c.to_digit(10).unwrap() as i64)
+        .collect();
+
+    let mut id : i64 = 0;
+    let mut is_data : bool = true;
+    let mut blocks : Vec<i64> = vec![];
+    for digit in digits {
+        for _i in 0..digit {
+            if is_data {
+                blocks.push(id);
+            }
+            else {
+                blocks.push(FREE_SPACE);
+            }
+        }
+        if is_data {
+            id += 1;
+        }
+        is_data =  !is_data;
+    }
+
+    let mut blocks_clone = blocks.clone();
+    for i in (0..blocks_clone.len()).rev() {
+        if blocks_clone[i] == FREE_SPACE {
+            blocks_clone.remove(i);
+        }
+    }
+
+    dbg!(blocks_clone);
+    dbg!(blocks);
+    let acc = 1;
+
+    return acc;
+}
+
 fn main() {
 
     let input : &str = include_str!("../input.txt");
@@ -71,6 +112,12 @@ mod tests {
     fn test_1() {
         let input = "2333133121414131402";
         assert_eq!(1928, part1(input));
+
+    }
+    #[test]
+    fn test_2() {
+        let input = "2333133121414131402";
+        assert_eq!(part2(input),1);
 
     }
 }
